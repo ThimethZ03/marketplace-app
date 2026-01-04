@@ -1,0 +1,810 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Home - Marketplace{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        :root {
+            --primary-gradient: linear-gradient(135deg, #235aa3ff 0%, #1e508aff 100%);
+            --primary-color: #2356a3ff;
+            --shadow-sm: 0 2px 4px rgba(0,0,0,0.04);
+            --shadow-md: 0 4px 12px rgba(0,0,0,0.08);
+            --shadow-lg: 0 12px 24px rgba(0,0,0,0.12);
+        }
+
+        /* Compact Hero Section */
+        .hero-section {
+            background: var(--primary-gradient);
+            padding: 60px 0 80px;
+            position: relative;
+        }
+
+        .hero-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        /* Compact Search Bar */
+        .search-wrapper {
+            position: relative;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .search-input {
+            border-radius: 50px;
+            padding: 16px 140px 16px 24px;
+            border: none;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+            font-size: 1rem;
+        }
+
+        .search-btn {
+            position: absolute;
+            right: 6px;
+            top: 50%;
+            transform: translateY(-50%);
+            border-radius: 50px;
+            padding: 11px 32px;
+            background: #ffc107;
+            border: none;
+            color: #1a202c;
+            font-weight: 600;
+        }
+
+        /* Compact Category Grid */
+        .category-section {
+            padding: 40px 0 50px;
+        }
+
+        .category-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 20px;
+        }
+
+        .category-card {
+            background: white;
+            border-radius: 12px;
+            padding: 24px 16px;
+            text-align: center;
+            transition: all 0.3s ease;
+            border: 2px solid #f3f4f6;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .category-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+            border-color: var(--primary-color);
+        }
+
+        .category-icon {
+            width: 50px;
+            height: 50px;
+            background: var(--primary-gradient);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 3px 10px rgba(35, 90, 163, 0.25);
+        }
+
+        .category-name {
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: #1a202c;
+            margin: 0;
+        }
+
+        .category-count {
+            font-size: 0.75rem;
+            color: #6b7280;
+        }
+
+        /* Compact Featured Products */
+        .featured-section {
+            padding: 40px 0 60px;
+            background: #f9fafb;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .section-title {
+            font-weight: 700;
+            font-size: 1.75rem;
+            margin: 0;
+        }
+
+        .product-card {
+            border: none;
+            border-radius: 12px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            background: white;
+            box-shadow: var(--shadow-sm);
+            height: 100%;
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .product-card img {
+            transition: transform 0.5s ease;
+        }
+
+        .product-card:hover img {
+            transform: scale(1.05);
+        }
+
+        .product-card .card-body {
+            padding: 16px;
+        }
+
+        /* Compact CTA */
+        .cta-section {
+            background: var(--primary-gradient);
+            padding: 60px 0;
+            text-align: center;
+        }
+
+        /* Footer */
+        .footer-dark {
+            background: linear-gradient(135deg, #1a202c 0%, #2d3748 100%);
+            color: #cbd5e0;
+            padding: 40px 0 20px;
+        }
+
+        /* Buttons */
+        .btn-primary {
+            background: var(--primary-gradient);
+            border: none;
+            padding: 12px 28px;
+            border-radius: 50px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(35, 90, 163, 0.4);
+        }
+
+        .btn-light {
+            border-radius: 50px;
+            padding: 12px 28px;
+            font-weight: 600;
+        }
+
+        .btn-yellow {
+            background: #ffc107;
+            color: #1a202c;
+            border: none;
+            padding: 12px 28px;
+            border-radius: 50px;
+            font-weight: 600;
+        }
+
+        .btn-yellow:hover {
+            background: #ffb300;
+            color: #1a202c;
+        }
+
+        /* Badge */
+        .badge {
+            padding: 6px 12px;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 0.7rem;
+        }
+
+        /* ========================================
+           MOBILE RESPONSIVE
+           ======================================== */
+
+        /* Tablet (992px and below) */
+        @media (max-width: 991.98px) {
+            .hero-section {
+                padding: 50px 0 70px;
+            }
+
+            .hero-title {
+                font-size: 2.2rem;
+            }
+
+            .search-input {
+                padding: 14px 130px 14px 20px;
+                font-size: 0.95rem;
+            }
+
+            .search-btn {
+                padding: 10px 28px;
+                font-size: 0.9rem;
+            }
+
+            .category-section {
+                padding: 35px 0 45px;
+            }
+
+            .section-title {
+                font-size: 1.6rem;
+            }
+
+            .featured-section {
+                padding: 35px 0 50px;
+            }
+
+            .cta-section {
+                padding: 50px 0;
+            }
+
+            .cta-section h2 {
+                font-size: 1.8rem !important;
+            }
+
+            .cta-section p {
+                font-size: 1rem !important;
+            }
+        }
+
+        /* Tablet/Phone (768px and below) */
+        @media (max-width: 767.98px) {
+            .hero-section {
+                padding: 40px 0 60px;
+            }
+
+            .hero-title {
+                font-size: 2rem;
+            }
+
+            .search-input {
+                padding: 13px 120px 13px 18px;
+                font-size: 0.9rem;
+            }
+
+            .search-btn {
+                padding: 9px 24px;
+                font-size: 0.85rem;
+            }
+
+            .category-section {
+                padding: 30px 0 40px;
+            }
+
+            .category-grid {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 15px;
+            }
+
+            .category-card {
+                padding: 20px 12px;
+                gap: 10px;
+            }
+
+            .category-icon {
+                width: 45px;
+                height: 45px;
+            }
+
+            .category-icon i {
+                font-size: 1.3rem !important;
+            }
+
+            .category-name {
+                font-size: 0.85rem;
+            }
+
+            .category-count {
+                font-size: 0.7rem;
+            }
+
+            .section-title {
+                font-size: 1.5rem;
+            }
+
+            .section-header {
+                margin-bottom: 25px;
+            }
+
+            .featured-section {
+                padding: 30px 0 45px;
+            }
+
+            .product-card .card-body {
+                padding: 14px;
+            }
+
+            .product-card img,
+            .product-card .card-img-top {
+                height: 160px !important;
+            }
+
+            .cta-section {
+                padding: 45px 0;
+            }
+
+            .cta-section h2 {
+                font-size: 1.6rem !important;
+            }
+
+            .cta-section p {
+                font-size: 0.95rem !important;
+            }
+
+            .footer-dark {
+                padding: 35px 0 18px;
+            }
+        }
+
+        /* Phone (576px and below) */
+        @media (max-width: 575.98px) {
+            .hero-section {
+                padding: 35px 0 50px;
+            }
+
+            .hero-title {
+                font-size: 1.75rem;
+                margin-bottom: 0.8rem;
+            }
+
+            .search-wrapper {
+                padding: 0 10px;
+            }
+
+            .search-input {
+                padding: 12px 18px;
+                padding-right: 18px;
+                font-size: 0.85rem;
+            }
+
+            .search-btn {
+                position: static;
+                transform: none;
+                width: 100%;
+                margin-top: 10px;
+                padding: 11px 24px;
+                font-size: 0.85rem;
+            }
+
+            .category-section {
+                padding: 25px 0 35px;
+            }
+
+            .category-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 12px;
+            }
+
+            .category-card {
+                padding: 18px 10px;
+                gap: 8px;
+                border-radius: 10px;
+            }
+
+            .category-icon {
+                width: 42px;
+                height: 42px;
+                border-radius: 8px;
+            }
+
+            .category-icon i {
+                font-size: 1.2rem !important;
+            }
+
+            .category-name {
+                font-size: 0.8rem;
+            }
+
+            .category-count {
+                font-size: 0.68rem;
+            }
+
+            .section-title {
+                font-size: 1.3rem;
+            }
+
+            .section-header {
+                margin-bottom: 20px;
+                flex-direction: column;
+                gap: 10px;
+                align-items: flex-start;
+            }
+
+            .section-header a {
+                font-size: 0.85rem;
+            }
+
+            .featured-section {
+                padding: 25px 0 40px;
+            }
+
+            .product-card {
+                border-radius: 10px;
+            }
+
+            .product-card .card-body {
+                padding: 12px;
+            }
+
+            .product-card img,
+            .product-card .card-img-top {
+                height: 140px !important;
+            }
+
+            .product-card .card-title {
+                font-size: 0.8rem !important;
+            }
+
+            .product-card .text-primary {
+                font-size: 1rem !important;
+            }
+
+            .product-card small {
+                font-size: 0.7rem;
+            }
+
+            .product-card .badge {
+                font-size: 0.6rem !important;
+                padding: 4px 8px;
+            }
+
+            .cta-section {
+                padding: 40px 0;
+            }
+
+            .cta-section h2 {
+                font-size: 1.4rem !important;
+                margin-bottom: 12px !important;
+            }
+
+            .cta-section p {
+                font-size: 0.9rem !important;
+                margin-bottom: 1.2rem !important;
+            }
+
+            .btn-yellow.btn-lg {
+                padding: 11px 24px !important;
+                font-size: 0.85rem;
+            }
+
+            .footer-dark {
+                padding: 30px 0 16px;
+            }
+
+            .footer-dark h5 {
+                font-size: 1.1rem;
+            }
+
+            .footer-dark h6 {
+                font-size: 0.95rem;
+            }
+
+            .footer-dark .small {
+                font-size: 0.8rem !important;
+            }
+
+            .footer-dark .bi-facebook,
+            .footer-dark .bi-twitter,
+            .footer-dark .bi-instagram {
+                font-size: 1.3rem !important;
+            }
+        }
+
+        /* Very Small Phone (400px and below) */
+        @media (max-width: 399.98px) {
+            .hero-title {
+                font-size: 1.5rem;
+            }
+
+            .search-input {
+                font-size: 0.8rem;
+                padding: 11px 16px;
+            }
+
+            .search-btn {
+                padding: 10px 20px;
+                font-size: 0.8rem;
+            }
+
+            .category-icon {
+                width: 38px;
+                height: 38px;
+            }
+
+            .category-icon i {
+                font-size: 1.1rem !important;
+            }
+
+            .category-name {
+                font-size: 0.75rem;
+            }
+
+            .section-title {
+                font-size: 1.2rem;
+            }
+
+            .product-card img,
+            .product-card .card-img-top {
+                height: 130px !important;
+            }
+
+            .product-card .card-title {
+                font-size: 0.75rem !important;
+            }
+
+            .product-card .text-primary {
+                font-size: 0.95rem !important;
+            }
+
+            .cta-section h2 {
+                font-size: 1.3rem !important;
+            }
+
+            .cta-section p {
+                font-size: 0.85rem !important;
+            }
+        }
+
+        /* Navbar responsive fixes */
+        @media (max-width: 991.98px) {
+            .navbar-brand {
+                font-size: 1.3rem !important;
+            }
+
+            .navbar-collapse {
+                margin-top: 15px;
+            }
+
+            .nav-item.ms-3,
+            .nav-item.ms-2,
+            .nav-item.ms-1 {
+                margin-left: 0 !important;
+                margin-top: 8px;
+            }
+
+            .btn-yellow.btn-sm {
+                width: 100%;
+                margin-top: 10px;
+            }
+
+            .btn-outline-danger.btn-sm {
+                width: 100%;
+            }
+        }
+
+        @media (max-width: 575.98px) {
+            .navbar-brand {
+                font-size: 1.2rem !important;
+            }
+
+            .navbar-brand i {
+                font-size: 1.1rem;
+            }
+        }
+    </style>
+{% endblock %}
+
+{% block navbar %}
+<nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm sticky-top">
+    <div class="container">
+        <a class="navbar-brand fw-bold d-flex align-items-center gap-2" href="{{ path('app_home') }}" style="color: var(--primary-color); font-size: 1.5rem;">
+            <i class="bi bi-shop"></i>
+            Marketplace
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto align-items-lg-center">
+                <li class="nav-item">
+                    <a class="nav-link fw-semibold" href="{{ path('app_home') }}">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link fw-semibold" href="{{ path('app_advert_list') }}">All ads</a>
+                </li>
+                {% if app.user %}
+                    <li class="nav-item ms-3">
+                        <a class="nav-link" href="{{ path('app_user_dashboard') }}">
+                            <div class="d-flex align-items-center gap-2">
+                                <div class="bg-primary bg-opacity-10 text-primary rounded-circle d-flex align-items-center justify-content-center"
+                                     style="width: 36px; height: 36px;">
+                                    <strong style="font-size: 0.75rem;">{{ app.user.initials }}</strong>
+                                </div>
+                                <span class="fw-semibold">{{ app.user.firstName }}</span>
+                            </div>
+                        </a>
+                    </li>
+                    <li class="nav-item ms-2">
+                        <a class="btn btn-outline-danger btn-sm" href="{{ path('app_logout') }}" style="border-radius: 50px; padding: 6px 20px;">Logout</a>
+                    </li>
+                {% else %}
+                    <li class="nav-item ms-2">
+                        <a class="nav-link fw-semibold" href="{{ path('app_login') }}">Login</a>
+                    </li>
+                    <li class="nav-item ms-1">
+                        <a class="btn btn-yellow btn-sm" href="{{ path('app_register') }}" style="padding: 8px 20px;">POST YOUR AD</a>
+                    </li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+</nav>
+{% endblock %}
+
+{% block body %}
+<!-- Compact Hero Section -->
+<section class="hero-section text-white">
+    <div class="container">
+        <div class="text-center mb-4">
+            <h1 class="hero-title">What are you looking for?</h1>
+        </div>
+
+        <!-- Search Bar -->
+        <div class="search-wrapper">
+            <form method="get" action="{{ path('app_advert_list') }}">
+                <input type="text"
+                       name="search"
+                       class="form-control search-input"
+                       placeholder="I am looking for...">
+                <button type="submit" class="search-btn">
+                    <i class="bi bi-search me-1"></i> Search
+                </button>
+            </form>
+        </div>
+    </div>
+</section>
+
+<!-- Browse Items by Category -->
+<section class="category-section bg-white">
+    <div class="container">
+        <h2 class="section-title mb-4">Browse items by category</h2>
+        <div class="category-grid">
+            {% for category in categories %}
+            <a href="{{ path('app_advert_list', {category: category.id}) }}" class="text-decoration-none">
+                <div class="category-card">
+                    <div class="category-icon">
+                        {% if category.slug == 'electronics' %}
+                            <i class="bi bi-laptop text-white" style="font-size: 1.5rem;"></i>
+                        {% elseif category.slug == 'fashion' %}
+                            <i class="bi bi-bag text-white" style="font-size: 1.5rem;"></i>
+                        {% elseif category.slug == 'automotive' %}
+                            <i class="bi bi-car-front text-white" style="font-size: 1.5rem;"></i>
+                        {% elseif category.slug == 'home-garden' %}
+                            <i class="bi bi-house text-white" style="font-size: 1.5rem;"></i>
+                        {% elseif category.slug == 'sports' %}
+                            <i class="bi bi-trophy text-white" style="font-size: 1.5rem;"></i>
+                        {% elseif category.slug == 'books' %}
+                            <i class="bi bi-book text-white" style="font-size: 1.5rem;"></i>
+                        {% else %}
+                            <i class="bi bi-grid text-white" style="font-size: 1.5rem;"></i>
+                        {% endif %}
+                    </div>
+                    <h6 class="category-name">{{ category.name }}</h6>
+                    <small class="category-count">{{ category.advertCount }} ads</small>
+                </div>
+            </a>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- Featured Ads -->
+<section class="featured-section">
+    <div class="container">
+        <div class="section-header">
+            <h2 class="section-title">Featured Ads</h2>
+            <a href="{{ path('app_advert_list') }}" class="text-decoration-none fw-semibold" style="color: var(--primary-color);">
+                View All <i class="bi bi-arrow-right ms-1"></i>
+            </a>
+        </div>
+        <div class="row g-3">
+            {% for advert in featured_adverts|slice(0, 8) %}
+            <div class="col-6 col-md-4 col-lg-3">
+                <a href="{{ path('app_advert_show', {id: advert.id}) }}" class="text-decoration-none">
+                    <div class="card product-card">
+                        {% if advert.image %}
+                            <div style="overflow: hidden;">
+                                <img src="{{ advert.image|cloudinary_url }}"
+                                     class="card-img-top"
+                                     alt="{{ advert.title }}"
+                                     style="height: 180px; object-fit: cover;">
+                            </div>
+                        {% else %}
+                            <div class="card-img-top bg-light d-flex align-items-center justify-content-center" style="height: 180px;">
+                                <i class="bi bi-image text-muted" style="font-size: 2.5rem;"></i>
+                            </div>
+                        {% endif %}
+                        <div class="card-body">
+                            <p class="text-primary fw-bold mb-1" style="font-size: 1.1rem;">{{ advert.formattedPrice }}</p>
+                            <h6 class="card-title mb-2" style="font-size: 0.85rem; color: #1a202c; font-weight: 500;">
+                                {{ advert.title|slice(0, 45) }}{{ advert.title|length > 45 ? '...' : '' }}
+                            </h6>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <small class="text-muted"><i class="bi bi-geo-alt"></i> {{ advert.location|slice(0, 15) }}</small>
+                                <span class="badge bg-light text-primary" style="font-size: 0.65rem;">{{ advert.category ? advert.category.name : 'N/A' }}</span>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            {% else %}
+            <div class="col-12 text-center py-5">
+                <i class="bi bi-inbox" style="font-size: 4rem; opacity: 0.2; color: var(--primary-color);"></i>
+                <p class="text-muted mt-3 fw-semibold">No featured products yet</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- CTA Section -->
+<section class="cta-section text-white">
+    <div class="container">
+        <h2 class="fw-bold mb-3" style="font-size: 2rem;">Start Selling Today</h2>
+        <p class="mb-4" style="font-size: 1.1rem; opacity: 0.95;">Join thousands of sellers and reach buyers nationwide</p>
+        {% if not app.user %}
+            <a href="{{ path('app_register') }}" class="btn btn-yellow btn-lg px-4">
+                <i class="bi bi-plus-circle me-2"></i>POST YOUR AD
+            </a>
+        {% else %}
+            <a href="{{ path('app_user_advert_create') }}" class="btn btn-yellow btn-lg px-4">
+                <i class="bi bi-plus-circle me-2"></i>Create New Ad
+            </a>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}
+
+{% block footer %}
+<footer class="footer-dark">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-3 mb-3">
+                <h5 class="text-white fw-bold mb-3">Marketplace</h5>
+                <p class="small" style="opacity: 0.8;">Your trusted platform for buying and selling.</p>
+            </div>
+            <div class="col-md-2 mb-3">
+                <h6 class="text-white fw-semibold mb-3">Categories</h6>
+                <ul class="list-unstyled small">
+                    <li class="mb-2"><a href="#" class="text-decoration-none" style="color: #cbd5e0;">Electronics</a></li>
+                    <li class="mb-2"><a href="#" class="text-decoration-none" style="color: #cbd5e0;">Fashion</a></li>
+                    <li class="mb-2"><a href="#" class="text-decoration-none" style="color: #cbd5e0;">Automotive</a></li>
+                </ul>
+            </div>
+            <div class="col-md-2 mb-3">
+                <h6 class="text-white fw-semibold mb-3">Quick Links</h6>
+                <ul class="list-unstyled small">
+                    <li class="mb-2"><a href="{{ path('app_home') }}" class="text-decoration-none" style="color: #cbd5e0;">Home</a></li>
+                    <li class="mb-2"><a href="{{ path('app_advert_list') }}" class="text-decoration-none" style="color: #cbd5e0;">Browse Ads</a></li>
+                    {% if not app.user %}
+                        <li class="mb-2"><a href="{{ path('app_register') }}" class="text-decoration-none" style="color: #cbd5e0;">Sign Up</a></li>
+                    {% endif %}
+                </ul>
+            </div>
+            <div class="col-md-3 mb-3">
+                <h6 class="text-white fw-semibold mb-3">Connect</h6>
+                <div class="d-flex gap-3">
+                    <a href="#" class="text-white" style="opacity: 0.8;"><i class="bi bi-facebook" style="font-size: 1.5rem;"></i></a>
+                    <a href="#" class="text-white" style="opacity: 0.8;"><i class="bi bi-twitter" style="font-size: 1.5rem;"></i></a>
+                    <a href="#" class="text-white" style="opacity: 0.8;"><i class="bi bi-instagram" style="font-size: 1.5rem;"></i></a>
+                </div>
+            </div>
+        </div>
+        <hr class="border-secondary my-3" style="opacity: 0.2;">
+        <p class="text-center small mb-0" style="opacity: 0.7;">© 2025 Marketplace. All rights reserved.</p>
+    </div>
+</footer>
+{% endblock %}

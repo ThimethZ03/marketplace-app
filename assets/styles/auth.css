@@ -1,0 +1,92 @@
+/* Authentication Pages Styles */
+.auth-container {
+    min-height: 100vh;
+}
+
+.auth-left-side {
+    background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+}
+
+.auth-right-side {
+    background-color: #f8fafc;
+}
+
+.auth-card {
+    max-width: 450px;
+}
+
+.auth-icon-box {
+    width: 60px;
+    height: 60px;
+    background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+}
+
+.form-control:focus {
+    border-color: #6366f1;
+    box-shadow: 0 0 0 0.2rem rgba(99, 102, 241, 0.25);
+}
+
+.input-group-text {
+    background-color: #f1f5f9;
+    border-color: #e2e8f0;
+}
+
+.btn-auth-primary {
+    background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+    border: none;
+    padding: 0.75rem 2rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.btn-auth-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(99, 102, 241, 0.3);
+}
+
+.social-login-btn {
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    transition: all 0.3s ease;
+}
+
+.social-login-btn:hover {
+    border-color: rgba(255, 255, 255, 0.5);
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Login Page Specific */
+.login-features {
+    margin-top: 3rem;
+}
+
+.login-feature-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1.5rem;
+}
+
+.login-feature-icon {
+    font-size: 2rem;
+    margin-right: 1rem;
+}
+
+/* Register Page Specific */
+.register-info-section {
+    padding: 4rem 2rem;
+}
+
+.register-benefits {
+    list-style: none;
+    padding: 0;
+}
+
+.register-benefits li {
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+}
+
+.register-benefits i {
+    font-size: 1.5rem;
+    margin-right: 1rem;
+}

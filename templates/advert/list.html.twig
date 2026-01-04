@@ -1,0 +1,924 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}All Products - Marketplace{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        :root {
+            --primary-gradient: linear-gradient(135deg, #235aa3ff 0%, #1e508aff 100%);
+            --primary-color: #2356a3ff;
+            --shadow-sm: 0 2px 4px rgba(0,0,0,0.04);
+            --shadow-md: 0 4px 12px rgba(0,0,0,0.08);
+            --shadow-lg: 0 12px 24px rgba(0,0,0,0.12);
+        }
+
+        /* Header Section */
+        .page-header {
+            background: var(--primary-gradient);
+            padding: 40px 0;
+            color: white;
+        }
+
+        .page-title {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Search Bar */
+        .search-wrapper {
+            background: white;
+            border-radius: 50px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .search-input {
+            border: none;
+            padding: 14px 24px;
+            font-size: 1rem;
+            color: #1a202c !important;
+            background: white !important;
+            -webkit-text-fill-color: #1a202c !important;
+        }
+
+        .search-input::placeholder {
+            color: #9ca3af !important;
+            opacity: 1;
+        }
+
+        .search-input:focus {
+            box-shadow: none;
+            color: #1a202c !important;
+            background: white !important;
+            -webkit-text-fill-color: #1a202c !important;
+        }
+
+        .search-btn {
+            background: var(--primary-color);
+            border: none;
+            padding: 14px 32px;
+            color: white;
+            font-weight: 600;
+        }
+
+        .search-btn:hover {
+            background: #1e508aff;
+        }
+
+        /* Category Filter Pills */
+        .filter-section {
+            background: white;
+            padding: 24px;
+            border-radius: 12px;
+            box-shadow: var(--shadow-sm);
+            margin-bottom: 30px;
+        }
+
+        .category-pill {
+            display: inline-flex;
+            align-items: center;
+            padding: 10px 20px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            border: 2px solid #e5e7eb;
+            background: white;
+            color: #4b5563;
+            margin: 5px;
+        }
+
+        .category-pill:hover {
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+            transform: translateY(-2px);
+        }
+
+        .category-pill.active {
+            background: var(--primary-gradient);
+            color: white;
+            border-color: var(--primary-color);
+        }
+
+        .category-pill .badge {
+            background: rgba(255,255,255,0.3);
+            padding: 3px 10px;
+            border-radius: 50px;
+            font-size: 0.75rem;
+            margin-left: 8px;
+        }
+
+        .category-pill.active .badge {
+            background: rgba(255,255,255,0.25);
+        }
+
+        /* Product Cards */
+        .product-card {
+            border: none;
+            border-radius: 12px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            background: white;
+            box-shadow: var(--shadow-sm);
+            height: 100%;
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .product-image {
+            position: relative;
+            overflow: hidden;
+            height: 220px;
+        }
+
+        .product-image img {
+            transition: transform 0.5s ease;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .product-card:hover .product-image img {
+            transform: scale(1.08);
+        }
+
+        .product-badge {
+            position: absolute;
+            top: 12px;
+            left: 12px;
+            background: var(--primary-gradient);
+            color: white;
+            padding: 6px 14px;
+            border-radius: 50px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+        }
+
+        .product-body {
+            padding: 18px;
+        }
+
+        .product-title {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #1a202c;
+            margin-bottom: 8px;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .product-price {
+            font-size: 1.35rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 8px;
+        }
+
+        .product-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.8rem;
+            color: #6b7280;
+        }
+
+        .product-footer {
+            padding: 0 18px 18px;
+        }
+
+        .view-btn {
+            background: var(--primary-gradient);
+            border: none;
+            color: white;
+            padding: 10px;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .view-btn:hover {
+            background: #1e508aff;
+            transform: translateY(-2px);
+        }
+
+        /* Results Header */
+        .results-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+
+        .results-count {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #1a202c;
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 80px 20px;
+        }
+
+        .empty-state i {
+            font-size: 5rem;
+            color: var(--primary-color);
+            opacity: 0.2;
+            margin-bottom: 20px;
+        }
+
+        /* Pagination */
+        .pagination {
+            margin-top: 40px;
+        }
+
+        .pagination .page-link {
+            color: var(--primary-color);
+            border-color: #e5e7eb;
+            padding: 10px 16px;
+            margin: 0 4px;
+            border-radius: 8px;
+        }
+
+        .pagination .page-link:hover {
+            background: var(--primary-gradient);
+            color: white;
+            border-color: var(--primary-color);
+        }
+
+        .pagination .page-item.active .page-link {
+            background: var(--primary-gradient);
+            border-color: var(--primary-color);
+        }
+
+        /* Footer */
+        .footer-dark {
+            background: linear-gradient(135deg, #1a202c 0%, #2d3748 100%);
+            color: #cbd5e0;
+            padding: 40px 0 20px;
+        }
+
+        /* ========================================
+           MOBILE RESPONSIVE
+           ======================================== */
+
+        /* Tablet (992px and below) */
+        @media (max-width: 991.98px) {
+            .page-header {
+                padding: 35px 0;
+            }
+
+            .page-title {
+                font-size: 1.8rem;
+            }
+
+            .search-input {
+                padding: 13px 20px;
+                font-size: 0.95rem;
+            }
+
+            .search-btn {
+                padding: 13px 28px;
+            }
+
+            .filter-section {
+                padding: 20px;
+            }
+
+            .category-pill {
+                padding: 9px 18px;
+                font-size: 0.85rem;
+            }
+
+            .product-image {
+                height: 200px;
+            }
+
+            .results-count {
+                font-size: 1.15rem;
+            }
+
+            /* Navbar responsive */
+            .navbar-brand {
+                font-size: 1.3rem !important;
+            }
+
+            .navbar-collapse {
+                margin-top: 15px;
+            }
+
+            .nav-item.ms-3,
+            .nav-item.ms-2,
+            .nav-item.ms-1 {
+                margin-left: 0 !important;
+                margin-top: 8px;
+            }
+
+            .btn-sm {
+                width: 100%;
+                margin-top: 10px;
+            }
+
+            .btn-outline-danger.btn-sm {
+                width: 100%;
+            }
+
+            .footer-dark {
+                padding: 35px 0 18px;
+            }
+        }
+
+        /* Tablet/Phone (768px and below) */
+        @media (max-width: 767.98px) {
+            .page-header {
+                padding: 30px 0;
+            }
+
+            .page-title {
+                font-size: 1.6rem;
+            }
+
+            .page-header p {
+                font-size: 0.9rem;
+            }
+
+            .search-input {
+                padding: 12px 18px;
+                font-size: 0.9rem;
+            }
+
+            .search-btn {
+                padding: 12px 24px;
+                font-size: 0.9rem;
+            }
+
+            .filter-section {
+                padding: 18px;
+            }
+
+            .filter-section h5 {
+                font-size: 1rem;
+                margin-bottom: 12px !important;
+            }
+
+            .category-pill {
+                padding: 8px 16px;
+                font-size: 0.8rem;
+                margin: 4px;
+            }
+
+            .category-pill i {
+                font-size: 0.9rem;
+            }
+
+            .category-pill .badge {
+                font-size: 0.7rem;
+                padding: 2px 8px;
+                margin-left: 6px;
+            }
+
+            .product-image {
+                height: 180px;
+            }
+
+            .product-badge {
+                font-size: 0.7rem;
+                padding: 5px 12px;
+                top: 10px;
+                left: 10px;
+            }
+
+            .product-body {
+                padding: 14px;
+            }
+
+            .product-title {
+                font-size: 0.9rem;
+                margin-bottom: 6px;
+            }
+
+            .product-price {
+                font-size: 1.2rem;
+                margin-bottom: 6px;
+            }
+
+            .product-meta {
+                font-size: 0.75rem;
+            }
+
+            .product-footer {
+                padding: 0 14px 14px;
+            }
+
+            .view-btn {
+                padding: 9px;
+                font-size: 0.85rem;
+            }
+
+            .results-header {
+                margin-bottom: 20px;
+            }
+
+            .results-count {
+                font-size: 1.05rem;
+            }
+
+            .empty-state {
+                padding: 60px 20px;
+            }
+
+            .empty-state i {
+                font-size: 4rem;
+            }
+
+            .pagination {
+                margin-top: 30px;
+            }
+
+            .pagination .page-link {
+                padding: 8px 12px;
+                font-size: 0.85rem;
+                margin: 0 2px;
+            }
+        }
+
+        /* Phone (576px and below) */
+        @media (max-width: 575.98px) {
+            .page-header {
+                padding: 25px 0;
+            }
+
+            .page-title {
+                font-size: 1.4rem;
+                margin-bottom: 8px;
+            }
+
+            .page-header p {
+                font-size: 0.85rem;
+                margin-bottom: 1.2rem !important;
+            }
+
+            /* Keep search bar rounded and horizontal on mobile */
+            .search-wrapper {
+                border-radius: 50px;
+                background: white;
+                overflow: hidden;
+            }
+
+            .search-input {
+                padding: 11px 16px;
+                font-size: 0.85rem;
+                color: #1a202c !important;
+                background: white !important;
+                -webkit-text-fill-color: #1a202c !important;
+            }
+
+            .search-input::placeholder {
+                color: #9ca3af !important;
+            }
+
+            .search-input:focus {
+                color: #1a202c !important;
+                background: white !important;
+                -webkit-text-fill-color: #1a202c !important;
+            }
+
+            .search-btn {
+                padding: 11px 20px;
+                font-size: 0.85rem;
+            }
+
+            .filter-section {
+                padding: 16px;
+                margin-bottom: 24px;
+                border-radius: 10px;
+            }
+
+            .filter-section h5 {
+                font-size: 0.95rem;
+            }
+
+            .filter-section h5 i {
+                font-size: 0.9rem;
+            }
+
+            .category-pill {
+                padding: 7px 14px;
+                font-size: 0.75rem;
+                margin: 3px;
+                border-radius: 40px;
+            }
+
+            .category-pill i {
+                font-size: 0.85rem;
+                margin-right: 4px !important;
+            }
+
+            .category-pill .badge {
+                font-size: 0.65rem;
+                padding: 2px 7px;
+                margin-left: 5px;
+            }
+
+            .product-image {
+                height: 160px;
+            }
+
+            .product-badge {
+                font-size: 0.65rem;
+                padding: 4px 10px;
+                top: 8px;
+                left: 8px;
+            }
+
+            .product-body {
+                padding: 12px;
+            }
+
+            .product-title {
+                font-size: 0.85rem;
+                margin-bottom: 5px;
+                -webkit-line-clamp: 2;
+            }
+
+            .product-price {
+                font-size: 1.1rem;
+                margin-bottom: 5px;
+            }
+
+            .product-meta {
+                font-size: 0.7rem;
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 3px;
+            }
+
+            .product-footer {
+                padding: 0 12px 12px;
+            }
+
+            .view-btn {
+                padding: 8px;
+                font-size: 0.8rem;
+                border-radius: 6px;
+            }
+
+            .results-header {
+                margin-bottom: 18px;
+            }
+
+            .results-count {
+                font-size: 0.95rem;
+            }
+
+            .results-count i {
+                font-size: 0.9rem;
+            }
+
+            .empty-state {
+                padding: 50px 15px;
+            }
+
+            .empty-state i {
+                font-size: 3.5rem;
+                margin-bottom: 15px;
+            }
+
+            .empty-state h4 {
+                font-size: 1.1rem;
+            }
+
+            .empty-state p {
+                font-size: 0.85rem;
+            }
+
+            .pagination {
+                margin-top: 25px;
+            }
+
+            .pagination .page-link {
+                padding: 7px 10px;
+                font-size: 0.8rem;
+                margin: 0 1px;
+                border-radius: 6px;
+            }
+
+            .footer-dark {
+                padding: 30px 0 16px;
+            }
+
+            .footer-dark h5 {
+                font-size: 1rem;
+            }
+
+            .footer-dark h6 {
+                font-size: 0.9rem;
+            }
+
+            .footer-dark .small {
+                font-size: 0.75rem !important;
+            }
+
+            .footer-dark .bi-facebook,
+            .footer-dark .bi-twitter,
+            .footer-dark .bi-instagram {
+                font-size: 1.3rem !important;
+            }
+        }
+
+        /* Very Small Phone (400px and below) */
+        @media (max-width: 399.98px) {
+            .page-title {
+                font-size: 1.3rem;
+            }
+
+            .page-header p {
+                font-size: 0.8rem;
+            }
+
+            .search-input {
+                padding: 10px 14px;
+                font-size: 0.8rem;
+            }
+
+            .search-btn {
+                padding: 10px 18px;
+                font-size: 0.8rem;
+            }
+
+            .category-pill {
+                padding: 6px 12px;
+                font-size: 0.7rem;
+            }
+
+            .category-pill i {
+                font-size: 0.8rem;
+            }
+
+            .product-image {
+                height: 150px;
+            }
+
+            .product-title {
+                font-size: 0.8rem;
+            }
+
+            .product-price {
+                font-size: 1rem;
+            }
+
+            .product-meta {
+                font-size: 0.68rem;
+            }
+
+            .view-btn {
+                font-size: 0.75rem;
+            }
+
+            .results-count {
+                font-size: 0.9rem;
+            }
+
+            .empty-state i {
+                font-size: 3rem;
+            }
+
+            .empty-state h4 {
+                font-size: 1rem;
+            }
+        }
+    </style>
+{% endblock %}
+
+{% block navbar %}
+<nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm sticky-top">
+    <div class="container">
+        <a class="navbar-brand fw-bold d-flex align-items-center gap-2" href="{{ path('app_home') }}" style="color: var(--primary-color); font-size: 1.5rem;">
+            <i class="bi bi-shop"></i>
+            Marketplace
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto align-items-lg-center">
+                <li class="nav-item">
+                    <a class="nav-link fw-semibold" href="{{ path('app_home') }}">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link fw-semibold active" href="{{ path('app_advert_list') }}">All ads</a>
+                </li>
+                {% if app.user %}
+                    <li class="nav-item ms-3">
+                        <a class="nav-link" href="{{ path('app_user_dashboard') }}">
+                            <div class="d-flex align-items-center gap-2">
+                                <div class="bg-primary bg-opacity-10 text-primary rounded-circle d-flex align-items-center justify-content-center"
+                                     style="width: 36px; height: 36px;">
+                                    <strong style="font-size: 0.75rem;">{{ app.user.initials }}</strong>
+                                </div>
+                                <span class="fw-semibold">{{ app.user.firstName }}</span>
+                            </div>
+                        </a>
+                    </li>
+                    <li class="nav-item ms-2">
+                        <a class="btn btn-outline-danger btn-sm" href="{{ path('app_logout') }}" style="border-radius: 50px; padding: 6px 20px;">Logout</a>
+                    </li>
+                {% else %}
+                    <li class="nav-item ms-2">
+                        <a class="nav-link fw-semibold" href="{{ path('app_login') }}">Login</a>
+                    </li>
+                    <li class="nav-item ms-1">
+                        <a class="btn btn-sm" href="{{ path('app_register') }}" style="background: var(--primary-gradient); color: white; border-radius: 50px; padding: 8px 20px; font-weight: 600;">Sign Up</a>
+                    </li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+</nav>
+{% endblock %}
+
+{% block body %}
+<!-- Page Header -->
+<section class="page-header">
+    <div class="container">
+        <h1 class="page-title">
+            {% if selected_category %}
+                {{ selected_category.name }}
+            {% else %}
+                Browse All Products
+            {% endif %}
+        </h1>
+        <p class="mb-4" style="opacity: 0.9;">Discover amazing deals from our marketplace</p>
+
+        <!-- Search Bar -->
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <form method="get" action="{{ path('app_advert_list') }}" class="search-wrapper">
+                    <div class="input-group">
+                        <input type="text"
+                               name="search"
+                               class="form-control search-input"
+                               placeholder="Search for products..."
+                               value="{{ app.request.query.get('search') }}">
+                        {% if selected_category %}
+                            <input type="hidden" name="category" value="{{ selected_category.id }}">
+                        {% endif %}
+                        <button class="search-btn" type="submit">
+                            <i class="bi bi-search me-1"></i> Search
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Main Content -->
+<section class="py-5 bg-light">
+    <div class="container">
+        <!-- Category Filter -->
+        <div class="filter-section">
+            <h5 class="mb-3 fw-bold"><i class="bi bi-funnel me-2"></i>Filter by Category</h5>
+            <div class="d-flex flex-wrap">
+                <a href="{{ path('app_advert_list') }}"
+                   class="category-pill {% if not selected_category %}active{% endif %}">
+                    <i class="bi bi-grid-3x3-gap me-2"></i>
+                    All Products
+                </a>
+                {% for category in categories %}
+                    <a href="{{ path('app_advert_list', {category: category.id}) }}"
+                       class="category-pill {% if selected_category and selected_category.id == category.id %}active{% endif %}">
+                        {% if category.slug == 'electronics' %}
+                            <i class="bi bi-laptop me-2"></i>
+                        {% elseif category.slug == 'fashion' %}
+                            <i class="bi bi-bag me-2"></i>
+                        {% elseif category.slug == 'automotive' %}
+                            <i class="bi bi-car-front me-2"></i>
+                        {% elseif category.slug == 'home-garden' %}
+                            <i class="bi bi-house me-2"></i>
+                        {% elseif category.slug == 'sports' %}
+                            <i class="bi bi-trophy me-2"></i>
+                        {% elseif category.slug == 'books' %}
+                            <i class="bi bi-book me-2"></i>
+                        {% else %}
+                            <i class="bi bi-grid me-2"></i>
+                        {% endif %}
+                        {{ category.name }}
+                        <span class="badge">{{ category.advertCount }}</span>
+                    </a>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Results Header -->
+        {% if pagination.items|length > 0 %}
+        <div class="results-header">
+            <div class="results-count">
+                <i class="bi bi-box-seam me-2" style="color: var(--primary-color);"></i>
+                {{ pagination.getTotalItemCount }} Results
+            </div>
+        </div>
+
+        <!-- Products Grid -->
+        <div class="row g-4">
+            {% for advert in pagination %}
+            <div class="col-6 col-md-4 col-lg-3">
+                <div class="card product-card">
+                    <div class="product-image">
+                        {% if advert.image %}
+                            <img src="{{ advert.image|cloudinary_url }}" alt="{{ advert.title }}">
+                        {% else %}
+                            <div class="bg-light d-flex align-items-center justify-content-center" style="height: 220px;">
+                                <i class="bi bi-image text-muted" style="font-size: 3rem;"></i>
+                            </div>
+                        {% endif %}
+                        <span class="product-badge">
+                            {{ advert.category ? advert.category.name : 'N/A' }}
+                        </span>
+                    </div>
+                    <div class="product-body">
+                        <h6 class="product-title">{{ advert.title }}</h6>
+                        <div class="product-price">{{ advert.formattedPrice }}</div>
+                        <div class="product-meta">
+                            <span><i class="bi bi-geo-alt"></i> {{ advert.location|slice(0, 15) }}</span>
+                            <span><i class="bi bi-clock"></i> {{ advert.formattedDate }}</span>
+                        </div>
+                    </div>
+                    <div class="product-footer">
+                        <a href="{{ path('app_advert_show', {id: advert.id}) }}" class="btn view-btn w-100">
+                            View Details
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- Pagination -->
+        <div class="d-flex justify-content-center">
+            {{ knp_pagination_render(pagination) }}
+        </div>
+        {% else %}
+        <!-- Empty State -->
+        <div class="empty-state">
+            <i class="bi bi-inbox-fill"></i>
+            <h4 class="fw-bold mb-2">No products found</h4>
+            <p class="text-muted mb-4">Try adjusting your search or filters</p>
+            <a href="{{ path('app_advert_list') }}" class="btn btn-primary">
+                <i class="bi bi-arrow-left me-2"></i>View All Products
+            </a>
+        </div>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}
+
+{% block footer %}
+<footer class="footer-dark">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4 mb-3">
+                <h5 class="text-white fw-bold mb-3">
+                    <i class="bi bi-shop me-2"></i>Marketplace
+                </h5>
+                <p class="small" style="opacity: 0.8;">Your trusted platform to buy, sell, and discover the best deals online.</p>
+            </div>
+            <div class="col-md-2 mb-3">
+                <h6 class="text-white fw-semibold mb-3">Categories</h6>
+                <ul class="list-unstyled small">
+                    <li class="mb-2"><a href="#" class="text-decoration-none" style="color: #cbd5e0; opacity: 0.8;">Electronics</a></li>
+                    <li class="mb-2"><a href="#" class="text-decoration-none" style="color: #cbd5e0; opacity: 0.8;">Fashion</a></li>
+                    <li class="mb-2"><a href="#" class="text-decoration-none" style="color: #cbd5e0; opacity: 0.8;">Automotive</a></li>
+                </ul>
+            </div>
+            <div class="col-md-3 mb-3">
+                <h6 class="text-white fw-semibold mb-3">Quick Links</h6>
+                <ul class="list-unstyled small">
+                    <li class="mb-2"><a href="{{ path('app_home') }}" class="text-decoration-none" style="color: #cbd5e0; opacity: 0.8;">Home</a></li>
+                    <li class="mb-2"><a href="{{ path('app_advert_list') }}" class="text-decoration-none" style="color: #cbd5e0; opacity: 0.8;">Browse Ads</a></li>
+                </ul>
+            </div>
+            <div class="col-md-3 mb-3">
+                <h6 class="text-white fw-semibold mb-3">Connect</h6>
+                <div class="d-flex gap-3">
+                    <a href="#" class="text-white" style="opacity: 0.8;"><i class="bi bi-facebook" style="font-size: 1.5rem;"></i></a>
+                    <a href="#" class="text-white" style="opacity: 0.8;"><i class="bi bi-twitter" style="font-size: 1.5rem;"></i></a>
+                    <a href="#" class="text-white" style="opacity: 0.8;"><i class="bi bi-instagram" style="font-size: 1.5rem;"></i></a>
+                </div>
+            </div>
+        </div>
+        <hr class="border-secondary my-3" style="opacity: 0.2;">
+        <p class="text-center small mb-0" style="opacity: 0.7;">© 2025 Marketplace. All rights reserved.</p>
+    </div>
+</footer>
+{% endblock %}

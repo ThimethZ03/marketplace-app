@@ -1,0 +1,13 @@
+# config/routes.yaml
+
+# Home route
+home:
+    path: /
+    controller: App\Controller\HomeController::index
+
+# Import controller annotations/attributes
+controllers:
+    resource:
+        path: ../src/Controller/
+        namespace: App\Controller
+    type: attribute

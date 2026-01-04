@@ -1,0 +1,32 @@
+parameters:
+    adverts_directory: "%kernel.project_dir%/public/uploads/adverts"
+
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+
+    App\:
+        resource: "../src/"
+        exclude:
+            - "../src/DependencyInjection/"
+            - "../src/Entity/"
+            - "../src/Kernel.php"
+
+    # Local File Uploader (backup/fallback)
+    App\Service\FileUploader:
+        arguments:
+            $targetDirectory: "%adverts_directory%"
+
+    # Cloudinary Uploader (primary)
+    App\Service\CloudinaryUploader:
+        arguments:
+            $cloudName: "%env(CLOUDINARY_CLOUD_NAME)%"
+            $apiKey: "%env(CLOUDINARY_API_KEY)%"
+            $apiSecret: "%env(CLOUDINARY_API_SECRET)%"
+
+when@test:
+    services:
+        _defaults:
+            autowire: true
+            autoconfigure: true

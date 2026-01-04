@@ -1,0 +1,178 @@
+/* Admin Panel Styles */
+.admin-sidebar {
+    background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%);
+    color: white;
+}
+
+.admin-sidebar .nav-link {
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.admin-sidebar .nav-link:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: white;
+}
+
+.admin-sidebar .nav-link.active {
+    background-color: rgba(99, 102, 241, 0.3);
+    color: white;
+}
+
+.admin-stat-card {
+    position: relative;
+    overflow: hidden;
+}
+
+.admin-stat-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 100px;
+    height: 100px;
+    background: radial-gradient(circle, rgba(99, 102, 241, 0.1) 0%, transparent 70%);
+}
+
+.admin-badge {
+    display: inline-block;
+    padding: 0.35rem 0.65rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    border-radius: 6px;
+}
+
+.admin-badge-success {
+    background-color: #dcfce7;
+    color: #166534;
+}
+
+.admin-badge-danger {
+    background-color: #fee2e2;
+    color: #991b1b;
+}
+
+.admin-badge-warning {
+    background-color: #fef3c7;
+    color: #92400e;
+}
+
+.admin-badge-info {
+    background-color: #dbeafe;
+    color: #1e40af;
+}
+
+/* User Management Table */
+.user-management-table {
+    font-size: 0.95rem;
+}
+
+.user-avatar-small {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+.role-badge {
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 500;
+}
+
+.role-badge-admin {
+    background-color: #fef2f2;
+    color: #dc2626;
+    border: 1px solid #fecaca;
+}
+
+.role-badge-manager {
+    background-color: #f0fdf4;
+    color: #16a34a;
+    border: 1px solid #bbf7d0;
+}
+
+.role-badge-user {
+    background-color: #eff6ff;
+    color: #2563eb;
+    border: 1px solid #bfdbfe;
+}
+
+/* Quick Actions */
+.quick-action-card {
+    border: 2px dashed #e2e8f0;
+    transition: all 0.3s ease;
+}
+
+.quick-action-card:hover {
+    border-color: #6366f1;
+    background-color: rgba(99, 102, 241, 0.05);
+}
+
+/* Moderator Actions */
+.moderator-action-btn {
+    font-size: 0.85rem;
+    padding: 0.4rem 1rem;
+}
+
+.promote-btn {
+    background-color: #10b981;
+    border-color: #10b981;
+    color: white;
+}
+
+.promote-btn:hover {
+    background-color: #059669;
+    border-color: #059669;
+}
+
+.demote-btn {
+    background-color: #ef4444;
+    border-color: #ef4444;
+    color: white;
+}
+
+.demote-btn:hover {
+    background-color: #dc2626;
+    border-color: #dc2626;
+}
+
+/* Search Box */
+.admin-search-box {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+}
+
+.admin-search-input {
+    border: none;
+    padding: 1rem;
+}
+
+.admin-search-input:focus {
+    outline: none;
+    box-shadow: none;
+}
+
+/* Tabs */
+.admin-tabs .nav-link {
+    color: #64748b;
+    font-weight: 500;
+    border: none;
+    border-bottom: 3px solid transparent;
+    padding: 1rem 1.5rem;
+}
+
+.admin-tabs .nav-link.active {
+    color: #6366f1;
+    border-bottom-color: #6366f1;
+    background: none;
+}
+
+.admin-tabs .nav-link:hover {
+    color: #6366f1;
+}

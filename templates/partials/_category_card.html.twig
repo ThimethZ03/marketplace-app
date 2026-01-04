@@ -1,0 +1,43 @@
+{% if category is defined %}
+<div class="category-card-wrapper">
+    <a href="{{ path('app_advert_list', {category: category.id}) }}" class="text-decoration-none">
+        <div class="card category-card border-0 shadow-sm h-100">
+            <div class="card-body text-center p-4">
+                <div class="category-icon-box mb-3 mx-auto bg-primary bg-opacity-10 rounded-circle d-flex align-items-center justify-content-center" style="width: 80px; height: 80px;">
+                    {% if category.icon == 'electronics' %}
+                        <i class="bi bi-laptop text-primary" style="font-size: 2.5rem;"></i>
+                    {% elseif category.icon == 'fashion' %}
+                        <i class="bi bi-bag text-primary" style="font-size: 2.5rem;"></i>
+                    {% elseif category.icon == 'home' %}
+                        <i class="bi bi-house text-primary" style="font-size: 2.5rem;"></i>
+                    {% elseif category.icon == 'books' %}
+                        <i class="bi bi-book text-primary" style="font-size: 2.5rem;"></i>
+                    {% else %}
+                        <i class="bi bi-grid text-primary" style="font-size: 2.5rem;"></i>
+                    {% endif %}
+                </div>
+                <h5 class="card-title mb-2 fw-bold">{{ category.name }}</h5>
+                <p class="card-text text-muted small mb-0">{{ category.formattedCount }}</p>
+            </div>
+        </div>
+    </a>
+</div>
+
+<style>
+.category-card {
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+.category-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15) !important;
+}
+.category-icon-box {
+    transition: all 0.3s ease;
+}
+.category-card:hover .category-icon-box {
+    background-color: rgba(99, 102, 241, 0.2) !important;
+    transform: scale(1.1);
+}
+</style>
+{% endif %}
